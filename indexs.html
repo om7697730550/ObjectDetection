@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Jarvis Labs</title>
+    <style>
+.collapsible {
+  background-color:white;
+  color:black;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: #f7942c;
+}
+
+.content {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}
+
+   * {
+     
+  box-sizing: border-box;
+}
+
+
+/*the container must be positioned relative:*/
+.autocomplete {
+  position: relative;
+  display: inline-block;
+}
+
+input {
+  border: 1px solid transparent;
+  background-color: #f1f1f1;
+  padding: 10px;
+  font-size: 16px;
+}
+
+input[type=text] {
+  background-color: #f1f1f1;
+  width: 100%;
+}
+
+input[type=submit] {
+  background-color: DodgerBlue;
+  color: #fff;
+  cursor: pointer;
+}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff; 
+  border-bottom: 1px solid #d4d4d4; 
+}
+
+/*when hovering an item:*/
+.autocomplete-items div:hover {
+  background-color: #e9e9e9; 
+}
+
+/*when navigating through the items using the arrow keys:*/
+.autocomplete-active {
+  background-color: DodgerBlue !important; 
+  color: #ffffff; 
+
+}
+  .main_sidebar {
+    min-height:100vh;
+    color: white;
+    position:fixed;
+    top:56px;
+    left:0;
+    width:16.65%;
+    transition: all 300ms cubic-bezier(0.65, 0.05, 0.36, 1);
+    will-change: left, width;
+    box-shadow: inset -1px 0 10px rgba(0, 0, 0, 0.4);
+    background: #13394c;
+}
+.main_sidebar:after {
+    content: '';
+    background-color: #112e3c;
+    position: absolute;
+    top: 0;
+    z-index: -1;
+    height: 100%;
+    width: 58px;
+}
+.main_sidebar ul {
+    list-style:none;
+    padding-left:58px;
+}
+.main_sidebar ul li {
+    padding: 17px;
+    font-size: 19px;
+    padding-right:0px
+}
+.main_sidebar ul li a {
+    color:#fff;
+    display:block;
+}
+.main_sidebar ul li i {
+    float:left;
+    color:grey;
+    margin-left:-75px;
+    font-size:24px;
+    padding-left:7px;
+}
+.main_sidebar ul li:hover {
+    background:#c3752b;
+}
+.main_sidebar ul li a:hover {
+    color:#fff;
+    text-decoration:none;
+}
+.main_sidebar ul li:hover i {
+    color:#f79538;
+}
+.main_sidebar ul li.active {
+    background:#0f4698;
+}
+.main_sidebar ul li.active i {
+    color:#fff;
+}
+.main_sidebar ul li.active:hover {
+    background:#167696;
+}
+.main_sidebar ul li.active:hover i {
+    color:#fff; 
+}
+
+.main {
+    float:right;
+    color:#fff;
+    display:block;
+    width:100%;
+    background:red;
+    min-height:100vh;
+}
+
+
+    
+.card_dash{
+    border-radius: 4px;
+    background: #fff;
+    box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+      transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
+  padding: 14px 15px 18px 15px;
+  cursor: pointer;
+  color : #0a396b,
+}
+
+.card_dash:hover{
+     transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+  text-decoration: none;
+}
+
+.card_dash h3{
+  font-weight: 600;
+}
+
+.card_dash img{
+  position: absolute;
+  top: 20px;
+  right: 15px;
+  max-height: 120px;
+}
+
+.card-1{
+    border: 5px solid #f7942c;
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: 80px;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.card-2{
+    border-left: 5px solid #009688;
+      background-repeat: no-repeat;
+    background-position: right;
+    background-size: 80px;
+}
+
+.card-3{
+    border-left: 5px solid #062434;
+      background-repeat: no-repeat;
+    background-position: right;
+    background-size: 80px;
+}
+
+@media(max-width: 990px){
+  .card_dash{
+    margin: 20px;
+  }
+} 
+.dash_cards {
+    color : #0a396b
+}
+.dash_cards:hover{
+    text-decoration: none;
+}
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+    
+    
+    </style>
+
+
+
+</head>
+<body>
+    
+<div class="topnav" style="height: 56px;background-color: #112e3c;">
+       
+      </div>
+      
+
+      
+      <div class="wrapper col-sm-2">
+            <aside class="main_sidebar">
+                  <a :href="$store.state.URL+'/web/dashboard'">
+                  <div class="navbar nav_title" style="border: 0; height: 140px; background: #112e3c;">
+                      <img src="D:\Assignment\JarvisLabs\img\Logo7.png" class="img-responsive" style="    width: 90%;  margin-left: 5px;">
+                  </div>
+              </a>
+              
+             <ul class="nav flex-column">
+            <li class="nav-item"  data-target="#myModal1" data-toggle="modal" >
+                <router-link active-class="active_a" class="nav-link contra-base">
+                    <i class="fa fa-home"style="font-size: 34px;"></i> Enquiry
+                    
+                </router-link>
+            </li>
+            <li class="nav-item"  data-target="#myModal2" data-toggle="modal" >
+                <router-link active-class="active_a" class="nav-link contra-base">
+                    <i class="fa fa-users"  style="font-size: 34px;" ></i> Mission Planning
+                </router-link>
+            </li>
+            <li class="nav-item"  data-target="#myModal3" data-toggle="modal"  >
+                <router-link active-class="active_a" class="nav-link contra-base">
+                        <i class="fa fa-product-hunt"  style="font-size: 34px;"></i> Drone Survey
+                </router-link>
+            </li>
+            <li class="nav-item"  data-target="#myModal4" data-toggle="modal" >
+                <router-link active-class="active_a" class="nav-link contra-base">
+                        <i class="fa fa-user-secret" style="font-size: 34px;" ></i> Identification 
+                </router-link>
+            </li>
+
+            <li class="nav-item"  data-target="#myModal5" data-toggle="modal" >
+                <router-link active-class="active_a" class="nav-link contra-base">
+                        <i class="fa fa-bar-chart"  style="font-size: 34px;"></i> Reports
+                </router-link>
+            </li>
+            <li class="nav-item"  data-target="#myModal6" data-toggle="modal" >
+                <router-link active-class="active_a" class="nav-link contra-base">
+                        <i class="fa fa-comments"  style="font-size: 34px;"></i> Rescue 
+                </router-link>
+            </li>
+            <!-- <li>
+                <router-link active-class="active_a" class="nav-link contra-base" :to="'/web/import'">
+                       <a class = "nav-link"> <i class="fa fa-upload"></i> Import</a>
+                </router-link>
+            </li> -->
+        </ul>
+            </aside>
+           
+        </div>    
+      
+ 
+
+    <div class="row col-sm-10" style="margin-top: 5px;">
+            <div class="card-body d-flex justify-space-around flex-wrap pl-1 pr-1">
+                    <div class="col-md-10" style="padding-bottom: 15px;">
+                        <div class="card_dash card-1 col-md-3" data-toggle="modal" data-target="#myModal1" style="margin-left: 45%;height: 135px;" >
+                          <h2 class="dash_cards" style="margin-top: 19%;">Enquiry</h2>
+                        </div>
+                        </div>   
+                    </div>    
+                   <div class="col-sm-10">
+                        <div class="card-body d-flex justify-space-around flex-wrap pl-1 pr-1">
+                                <div class="col-md-5" style="padding-bottom: 15px;">
+                                    <div class="card_dash card-1 col-md-8" data-toggle="modal" data-target="#myModal6" style="margin-left: 46%;height: 135px;">
+                                      <h2 class="dash_cards">Rescue and relief</h2>
+                                    </div>
+                                    </div>   
+                                </div>  
+                                <div class="card-body d-flex justify-space-around flex-wrap pl-1 pr-1">
+                                    <div class="col-md-5" style="padding-bottom: 15px;">
+                                        <div class="card_dash card-1 col-md-8"   data-toggle="modal" data-target="#myModal2"  style="margin-left: 69%;height: 135px;">
+                                          <h2 class="dash_cards">Mission Planning</h2>
+                                        </div>
+                                        </div>   
+                                    </div>  
+                   </div>
+ 
+                   <div class="col-sm-10">
+                        <div class="card-body d-flex justify-space-around flex-wrap pl-1 pr-1">
+                                <div class="col-md-5" style="padding-bottom: 15px;">
+                                    <div class="card_dash card-1 col-md-8" data-toggle="modal" data-target="#myModal5" style="margin-left: 46%;height: 135px;">
+                                      <h2 class="dash_cards" style="margin-top: 19%;">Data Transfer</h2>
+                                    </div>
+                                    </div>   
+                                </div>  
+                                <div class="card-body d-flex justify-space-around flex-wrap pl-1 pr-1">
+                                    <div class="col-md-5" style="padding-bottom: 15px;">
+                                        <div class="card_dash card-1 col-md-8" data-toggle="modal" data-target="#myModal3" style="margin-left: 69%;height: 135px;">
+                                          <h2 class="dash_cards">Drone Surveillance</h2>
+                                        </div>
+                                        </div>   
+                                    </div>  
+                   </div>
+                   <div class="card-body d-flex justify-space-around flex-wrap pl-1 pr-1">
+                        <div class="col-md-10" style="padding-bottom: 15px;">
+                            <div class="card_dash card-1 col-md-3" data-toggle="modal" data-target="#myModal4" style="margin-left: 45%;height: 135px;" >
+                              <h2 class="dash_cards" style="margin-top: 19%;">Identification</h2>
+                            </div>
+                            </div>   
+                        </div>    
+
+    </div>
+
+    <div class="container">
+        <div class="modal fade" id="myModal1" role="dialog">
+          <div class="modal-dialog modal-sm"  style="width: 550px;">
+            <div class="modal-content" >
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h2 class="modal-title" style="text-align: center; ">Enquiry</h2>
+              </div>
+              <div class="modal-body noti-body"  style="height: 350px;" >
+                <div class="x_content">
+                <article class="media event">
+                <div class="media-body">
+                   <div class="row" style="margin-left: 10px;" >                  
+                           
+                      <button type="button" class="collapsible"> <i class="fa fa-envelope-o" style="float: left;font-size: 40px;" aria-hidden="true"></i>  <h4 style="float: right;margin-right: 30%;"> Enquiry Registered to the database </h4></button>
+                      <div class="content" style="margin-top: 10px;">
+                       <div> <p> Disaster Type: EarthQuake </p></div>
+                       <div> <p> Enquiry Location: Mumbai </p></div>
+                       <div> <p> Response Status: Urgent </p></div>
+                       
+                       
+                      
+                      </div>
+                      <button type="button" class="collapsible"> <i class="fa fa-envelope-o" style="float: left;font-size: 40px;" aria-hidden="true"></i>  <h4 style="float: right;margin-right: 30%;"> Enquiry Registered to the database </h4></button>
+                      <div class="content" style="margin-top: 10px;">
+                       <div> <p> Disaster Type: Flood </p></div>
+                       <div> <p> Enquiry Location: Delhi </p></div>
+                       <div> <p> Response Status: Unresolved </p></div>
+                       
+                       
+                      
+                      </div>
+                      <button type="button" class="collapsible"> <i class="fa fa-envelope-o" style="float: left;font-size: 40px;" aria-hidden="true"></i>  <h4 style="float: right;margin-right: 30%;"> Enquiry Registered to the database </h4></button>
+                      <div class="content">
+                       <div> <p> Disaster Type: LandSlide </p></div>
+                       <div> <p> Enquiry Location: Mount Abu </p></div>
+                       <div> <p> Response Status: Urgent </p></div>
+                       
+                       
+                      
+                      </div>
+                </div> 
+                
+                
+                  </div>
+                </article>
+                </div>
+              </div>               
+              <div class="modal-footer">
+             <button type="button" class="btn btn-primary" data-target="#myModal2" data-toggle="modal" data-dismiss="modal" style="float: left;margin-left: 45%;">Respond</button>  
+            </div>
+              </div>
+            </div>
+          </div>
+        </div>  
+     
+      <div class="container">
+            <div class="modal fade" id="myModal2" role="dialog">
+              <div class="modal-dialog modal-sm"  style="width: 550px;">
+                <div class="modal-content" >
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title" style="text-align: center; ">Mission Planning</h2>
+                  </div>
+                  <div class="modal-body" style="height: 450px;">
+                        <form autocomplete="off" action="/action_page.php">
+                            <div class="autocomplete" style="width:300px;">
+                              <input id="myInput" type="text" name="myCountry" style="width:140%" placeholder="Select location to Plan Mission">
+                            </div>
+                            <button class="btn btn-primary" onclick="playVid()" type="button" style="font-size: 20px;margin-bottom: 4px;margin-left:140px;">
+                              Plan
+                            </button>
+                           
+                          </form> 
+                          <video id="myVideo" width="520" height="350" style="margin-left:0px;margin-top: 20px;" >
+                            <source src="D:\Assignment\JarvisLabs\img\3.mp4" type="video/mp4">
+                            <source src="D:\Assignment\JarvisLabs\img\2.ogg" type="video/ogg">
+                            Your browser does not support HTML5 video.
+                          </video>
+                          
+                        
+                        </div>
+                  <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-target="#myModal1"  data-toggle="modal" data-dismiss="modal" style="float: left;">Previous</button>  
+                    <button type="button" class="btn btn-primary" data-target="#myModal3"  data-toggle="modal" data-dismiss="modal" >Next</button>
+                  </div>
+                </div>
+              </div>
+            </div>  
+          </div>
+
+          <div class="container">
+              <div class="modal fade" id="myModal3" role="dialog">
+                <div class="modal-dialog modal-sm"  style="width: 550px;">
+                  <div class="modal-content" >
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <strong> <h2 class="modal-title" style="text-align: center; ">Drone Surveillance</h2> </strong> 
+                    </div>
+                    <div class="modal-body" style="height: 450px;">
+
+                            <video id="myVideo2" width="520" height="350"  onclick="playVid2()"  style="margin-left:0px;margin-top: 20px;" >
+                              <source src="D:\Assignment\JarvisLabs\img\1.mp4" type="video/mp4">
+                              <source src="D:\Assignment\JarvisLabs\img\2.ogg" type="video/ogg">
+                              Your browser does not support HTML5 video.
+                            </video>
+                            
+                          </div>
+                    <div class="modal-footer">
+                          <button type="button" class="btn btn-primary" data-target="#myModal2"  data-toggle="modal" data-dismiss="modal" style="float: left;">Previous</button>  
+                      <button type="button" class="btn btn-primary" data-target="#myModal4"  data-toggle="modal" data-dismiss="modal" >Next</button>
+                    </div>
+                  </div>
+                </div>
+              </div>  
+            </div>
+
+
+
+          <div class="container">
+            <div class="modal fade" id="myModal4" role="dialog">
+              <div class="modal-dialog modal-sm"  style="width: 550px;">
+                <div class="modal-content" >
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title" style="text-align: center; ">Identification of Humans</h2>
+                  </div>
+                  <div class="modal-body" style="height: 450px;">
+                     
+                          
+                          <video id="myVideo3" width="520" height="350" onclick="playVid3()" style="margin-left:0px;margin-top: 20px;" >
+                            <source src="D:\Assignment\JarvisLabs\img\4.mkv" type="video/mp4">
+                            <source src="D:\Assignment\JarvisLabs\img\2.ogg" type="video/ogg">
+                            Your browser does not support HTML5 video.
+
+                          </video>
+                        
+                        </div>
+                  <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-target="#myModal3" data-toggle="modal"  data-dismiss="modal" style="float: left;">Previous</button>  
+                    <button type="button" class="btn btn-primary" data-target="#myModal5" data-toggle="modal" data-dismiss="modal">Next</button>
+                  </div>
+                </div>
+              </div>
+            </div>  
+          </div>
+
+
+          <div class="container">
+            <div class="modal fade" id="myModal5" role="dialog">
+              <div class="modal-dialog modal-sm"  style="width: 550px;">
+                <div class="modal-content" >
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title" style="text-align: center; ">Data Transfer and Reporting</h2>
+                  </div>
+                  <div class="modal-body" style="height: 450px;">
+                     
+                          
+                          <video id="myVideo4" width="520" height="250" onclick="playVid4()" style="margin-left:0px;margin-top: 20px;" >
+                            <source src="D:\Assignment\JarvisLabs\img\2.mp4" type="video/mp4">
+                            <source src="D:\Assignment\JarvisLabs\img\2.ogg" type="video/ogg">
+                            Your browser does not support HTML5 video.
+                          </video>
+                          <div class="container mt-3" style="margin: 20px 20px;font-size: 20px;">
+                              <form action="/action_page.php">
+                                <div class="custom-control custom-checkbox mb-3">
+                                  <input type="checkbox" class="custom-control-input" id="customCheck1" name="example1">
+                                  <label class="custom-control-label" for="customCheck1">Call Ambulance</label>
+                                </div>
+                                    <div class="custom-control custom-checkbox mb-3">
+                                  <input type="checkbox" class="custom-control-input" id="customCheck2" name="example1">
+                                  <label class="custom-control-label" for="customCheck2">Inform NDRF</label>
+                                </div>
+                                    <div class="custom-control custom-checkbox mb-3">
+                                  <input type="checkbox" class="custom-control-input" id="customCheck3" name="example1">
+                                  <label class="custom-control-label" for="customCheck3">Inform Local Police</label>
+                                </div>
+
+                                <br>
+                              </form>
+                            </div>
+
+                        
+                        </div>
+                  <div class="modal-footer">
+                        <button type="button" class="btn btn-primary"  data-target="#myModal4" data-toggle="modal" data-dismiss="modal" style="float: left;">Previous</button>  
+                    <button type="button" class="btn btn-primary" data-target="#myModal6" data-toggle="modal" data-dismiss="modal">Next</button>
+                  </div>
+                </div>
+              </div>
+            </div>  
+          </div>
+
+
+
+          <div class="container">
+            <div class="modal fade" id="myModal6" role="dialog">
+              <div class="modal-dialog modal-sm"  style="width: 550px;">
+                <div class="modal-content" >
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title" style="text-align: center; ">Rescue and Relief</h2>
+                  </div>
+                  <div class="modal-body" style="height: 450px;">
+                   <img src="D:\Assignment\JarvisLabs\img\Disaster-relief.jpg" width="520" height="250" alt="">
+                     
+                      <div class="container mt-3" style="margin: 20px 20px;font-size: 20px;">
+                          <form action="/action_page.php">
+                            <div class="custom-control custom-checkbox mb-3">
+                              <input type="checkbox" class="custom-control-input" id="customCheck1" name="example1">
+                              <label class="custom-control-label" for="customCheck1">Drop Medicine</label>
+                            </div>
+                                <div class="custom-control custom-checkbox mb-3">
+                              <input type="checkbox" class="custom-control-input" id="customCheck2" name="example1">
+                              <label class="custom-control-label" for="customCheck2">Drop Life-Jacket</label>
+                            </div>
+                                <div class="custom-control custom-checkbox mb-3">
+                              <input type="checkbox" class="custom-control-input" id="customCheck3" name="example1">
+                              <label class="custom-control-label" for="customCheck3">Drop Food</label>
+                            </div>
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input" id="customCheck3" name="example1">
+                                <label class="custom-control-label" for="customCheck3">Drop Payload</label>
+                              </div>
+                            <br>
+                            
+                          </form>
+                        </div>
+  
+
+                        
+                        </div>
+                  <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal"  style="float: left; margin-left: 40%;">Make The Drop</button>  
+
+                  </div>
+                </div>
+              </div>
+            </div>  
+          </div>
+
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>      
+
+<script>
+function autocomplete(inp, arr) {
+  /*the autocomplete function takes two arguments,
+  the text field element and an array of possible autocompleted values:*/
+  var currentFocus;
+  /*execute a function when someone writes in the text field:*/
+  inp.addEventListener("input", function(e) {
+      var a, b, i, val = this.value;
+      /*close any already open lists of autocompleted values*/
+      closeAllLists();
+      if (!val) { return false;}
+      currentFocus = -1;
+      /*create a DIV element that will contain the items (values):*/
+      a = document.createElement("DIV");
+      a.setAttribute("id", this.id + "autocomplete-list");
+      a.setAttribute("class", "autocomplete-items");
+      /*append the DIV element as a child of the autocomplete container:*/
+      this.parentNode.appendChild(a);
+      /*for each item in the array...*/
+      for (i = 0; i < arr.length; i++) {
+        /*check if the item starts with the same letters as the text field value:*/
+        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+          /*create a DIV element for each matching element:*/
+          b = document.createElement("DIV");
+          /*make the matching letters bold:*/
+          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+          b.innerHTML += arr[i].substr(val.length);
+          /*insert a input field that will hold the current array item's value:*/
+          b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+          /*execute a function when someone clicks on the item value (DIV element):*/
+          b.addEventListener("click", function(e) {
+              /*insert the value for the autocomplete text field:*/
+              inp.value = this.getElementsByTagName("input")[0].value;
+              /*close the list of autocompleted values,
+              (or any other open lists of autocompleted values:*/
+              closeAllLists();
+          });
+          a.appendChild(b);
+        }
+      }
+  });
+  /*execute a function presses a key on the keyboard:*/
+  inp.addEventListener("keydown", function(e) {
+      var x = document.getElementById(this.id + "autocomplete-list");
+      if (x) x = x.getElementsByTagName("div");
+      if (e.keyCode == 40) {
+        /*If the arrow DOWN key is pressed,
+        increase the currentFocus variable:*/
+        currentFocus++;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 38) { //up
+        /*If the arrow UP key is pressed,
+        decrease the currentFocus variable:*/
+        currentFocus--;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 13) {
+        /*If the ENTER key is pressed, prevent the form from being submitted,*/
+        e.preventDefault();
+        if (currentFocus > -1) {
+          /*and simulate a click on the "active" item:*/
+          if (x) x[currentFocus].click();
+        }
+      }
+  });
+  function addActive(x) {
+    /*a function to classify an item as "active":*/
+    if (!x) return false;
+    /*start by removing the "active" class on all items:*/
+    removeActive(x);
+    if (currentFocus >= x.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = (x.length - 1);
+    /*add class "autocomplete-active":*/
+    x[currentFocus].classList.add("autocomplete-active");
+  }
+  function removeActive(x) {
+    /*a function to remove the "active" class from all autocomplete items:*/
+    for (var i = 0; i < x.length; i++) {
+      x[i].classList.remove("autocomplete-active");
+    }
+  }
+  function closeAllLists(elmnt) {
+    /*close all autocomplete lists in the document,
+    except the one passed as an argument:*/
+    var x = document.getElementsByClassName("autocomplete-items");
+    for (var i = 0; i < x.length; i++) {
+      if (elmnt != x[i] && elmnt != inp) {
+        x[i].parentNode.removeChild(x[i]);
+      }
+    }
+  }
+  /*execute a function when someone clicks in the document:*/
+  document.addEventListener("click", function (e) {
+      closeAllLists(e.target);
+  });
+}
+
+/*An array containing all the country names in the world:*/
+var countries = ["Adoni","Amaravati","Anantapur","Ahmadnagar","Akola","Amravati","Aurangabad","Bhandara","Bhusawal","Bid","Buldana","Betul","Bhojpur","Bhopal","Chandragiri","Chittoor","Chapra","Cuttak","Chhatarpur","Chhindwara","Chandrapur","Deoghar","Dhanbad","Dumka","Dhamtari","Durg","Daman","Diu","Eluru","Guntur","Kadapa","Kakinada","Kurnool","Machilipatnam","Rewa","Sagar","Sarangpur","Satna","Sehore","Seoni","Shahdol","Shajapur","Sheopur","Shivpuri","Ujjain","Delhi","Vidisha","Mumbai","Mount Abu","Banglore","Kolkata"];
+/*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+autocomplete(document.getElementById("myInput"), countries);
+
+var vid1 = document.getElementById("myVideo"); 
+
+function playVid() { 
+  vid1.play(); 
+}
+var vid2 = document.getElementById("myVideo2"); 
+
+function playVid2() { 
+  vid2.play(); 
+}  
+
+var vid3 = document.getElementById("myVideo3"); 
+
+function playVid3() { 
+  vid3.play(); 
+}  
+
+var vid4 = document.getElementById("myVideo4"); 
+
+function playVid4() { 
+  vid4.play(); 
+}  
+
+
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
+
+</script>
+
+
+
+
+
+
+</body>
+</html>
