@@ -1,0 +1,67 @@
+#  program for face , eyes and  body detection
+
+import cv2
+
+img = cv2.VideoCapture('droneVideo.mp4')
+detect_face = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+detect_eye = cv2.CascadeClassifier('haarcascade_eye_tree_eyeglasses.xml')
+detect_upperbody =cv2.CascadeClassifier('haarcascade_upperbody.xml')
+detect_fullbody =cv2.CascadeClassifier('haarcascade_fullbody.xml')
+
+# setting camera parameter
+img.set(3,1000)
+img.set(4,1000)
+
+while img.isOpened():
+    _,frame = img.read()
+    gray = cv2.cvtColor(frame , cv2.COLOR_BGR2GRAY)
+    # start - upper and full body detection
+
+    # Ubody = detect_upperbody.detectMultiScale(gray, 1.8 ,1 ) # 1.1,6
+    Fbody = detect_fullbody.detectMultiScale(gray,1.4 ,2) # 1.06,1
+
+    # for (p, q, pw, ph) in Fbody:
+    #     cv2.rectangle(frame, (p, q), (p + pw, q + ph), (212, 255, 0), 2)
+
+    for (c, d, cw, ch) in Fbody:
+        cv2.rectangle(frame, (c, d), (c + cw, d + ch), (255, 0, 0), 2)
+        # start- face detect
+        color_U = frame[d:d + ch, c:c + cw]
+        gray_U = gray[d:d + ch, c:c + cw]
+        faces = detect_face.detectMultiScale(gray_U) # 1.6, 4
+
+        for (x, y, w, h) in faces:
+            cv2.rectangle(color_U, (x, y), (x + w, y + h), (43, 35, 232), 2)
+        #  close - face detect
+            #  puttung text on img
+
+            Cf = len(faces)
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            p = str(x) + ',' + str(y) + '  face =' + str(Cf)
+            frame = cv2.putText(frame, p, (x, y), font, 1, (0, 0, 255), 2, cv2.LINE_AA)
+
+            # start eye detection
+            color_eye = frame[y:y + h, x:x + w]
+            gray_eye = gray[y:y + h, x:x + w]
+            eyes = detect_eye.detectMultiScale(gray_eye)  # 1.5,3
+            for (a, b, aw, ah) in eyes:
+                cv2.rectangle(color_eye, (a, b), (a + aw, b + ah), (252, 250, 88), 2)
+            # close eye detection
+
+        #close face detection
+
+
+    #  close U_F body detection
+
+    # start face detecting
+
+
+
+
+    # showing frame
+    cv2.imshow('image',frame)
+    if cv2.waitKey(1) == ord('q'):
+        break
+
+img.release()
+cv2.destroyAllWindows()
